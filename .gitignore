@@ -12,3 +12,6 @@ training_scripts/start_interactive.sh
 **/__pycache__/
 analysis/
 results/
+indic_nlp_library/
+indic_nlp_reources/
+common_vocab_spm/
