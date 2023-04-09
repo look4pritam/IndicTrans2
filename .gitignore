@@ -1,0 +1,14 @@
+checkpoints/
+tensorboard_logs/
+comet/
+**/wandb/
+benchmarks/
+.ipynb_checkpoints/
+*.out
+*.pt
+*.csv
+data_dir/
+training_scripts/start_interactive.sh
+**/__pycache__/
+analysis/
+results/

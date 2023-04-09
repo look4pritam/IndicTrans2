@@ -1,0 +1,56 @@
+exp_dir=$1
+pretrained_ckpt=$2
+name=$3
+
+fairseq-train $exp_dir/final_bin \
+--max-source-positions 256 \
+--max-target-positions 256 \
+--max-update 1000000 \
+--save-interval-updates 2500 \
+--arch transformer \
+--encoder-embed-dim 1536 \
+--decoder-embed-dim 1536 \
+--encoder-ffn-embed-dim 4096 \
+--decoder-ffn-embed-dim 4096 \
+--encoder-attention-heads 16 \
+--decoder-attention-heads 16 \
+--activation-fn gelu \
+--encoder-normalize-before \
+--decoder-normalize-before \
+--layernorm-embedding \
+--criterion label_smoothed_cross_entropy \
+--source-lang SRC \
+--target-lang TGT \
+--lr-scheduler inverse_sqrt \
+--label-smoothing 0.1 \
+--optimizer adam \
+--adam-betas "(0.9, 0.98)" \
+--clip-norm 1.0 \
+--warmup-init-lr 1e-07 \
+--lr 3e-5 \
+--warmup-updates 4000 \
+--dropout 0.2 \
+--save-dir $exp_dir/${name}_FT_seed_data \
+--keep-last-epochs 5 \
+--keep-interval-updates 3 \
+--patience 10 \
+--skip-invalid-size-inputs-valid-test \
+--fp16 \
+--update-freq 8 \
+--distributed-world-size 1 \
+--num-workers 6 \
+--max-tokens 8192 \
+--eval-bleu \
+--eval-bleu-args "{\"beam\": 1, \"lenpen\": 1.0, \"max_len_a\": 1.2, \"max_len_b\": 10}" \
+--eval-bleu-detok moses \
+--eval-bleu-remove-bpe sentencepiece \
+--eval-bleu-print-samples \
+--best-checkpoint-metric bleu \
+--maximize-best-checkpoint-metric \
+--wandb-project sam_v2-nway-ablation \
+--task translation \
+--reset-lr-scheduler \
+--reset-meters \
+--reset-dataloader \
+--reset-optimizer \
+--restore-file $pretrained_ckpt/checkpoint_best.pt
